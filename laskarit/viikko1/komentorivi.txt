@@ -1,0 +1,28 @@
+leljas@melkki:~$ tree
+.
+├── Desktop -> /home/ad/home/l/leljas/Desktop
+├── Documents -> /home/ad/home/l/leljas/Documents
+├── Downloads -> /home/ad/home/l/leljas/Downloads
+└── kurssit
+    └── ot2021
+        └── viikko1
+            └── Unicafe
+                ├── pom.xml
+                └── src
+                    ├── main
+                    │   └── java
+                    │       └── com
+                    │           └── mycompany
+                    │               └── unicafe
+                    │                   ├── Kassapaate.java
+                    │                   ├── Maksukortti.java
+                    │                   └── Paaohjelma.java
+                    └── test
+                        └── java
+                            └── com
+                                └── mycompany
+                                    └── unicafe
+                                        └── MaksukorttiTest.java
+
+18 directories, 5 files
+leljas@melkki:~$
