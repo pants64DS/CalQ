@@ -1,91 +1,124 @@
 package calq.calq;
 
-import java.lang.System;
-import java.util.ArrayList;
+import java.lang.Math;
 
-public class Evaluator {
+class Evaluator {
+	private static double parseNumber(String expr) {
+		if (expr.startsWith("0x"))
+			return Integer.parseInt(expr.substring(2), 16);
+		else if (expr.startsWith("0"))
+			return Integer.parseInt(expr, 8);
+		else
+			return Double.parseDouble(expr);
+	}
 
-    public static String evaluate(String expression) {
-        expression = expression.replace("-", "+-").replaceAll("\\s+","");
-        var parts = expression.split("\\+");
-        if (parts.length == 0) return "";
-        
-        int res = 0;
+	private static double evalUnary(String expr, int start, int end) throws Exception {
+		if (Character.isDigit(expr.charAt(start)))
+			return parseNumber(expr.substring(start, end));
+		else if (expr.charAt(start) == '(' && expr.charAt(end - 1) == ')')
+			return evalImpl(expr, start + 1, end - 1, 5);
+
+		double res = evalUnary(expr, start + 1, end);
+
+		switch (expr.charAt(start)) {
+			case '+': return +res;
+			case '-': return -res;
+			// case '~': return ~res;
+			case 'S': return Math.sin(res);
+			case 'K': return Math.cos(res);
+			case 'T': return Math.tan(res);
+			case 'Q': return Math.sqrt(res);
+			case 'F': return Math.floor(res);
+			case 'C': return Math.ceil(res);
+		}
+
+		if (true) {
+			throw new Exception("Bad unary expression");
+		}
+		return 0;
+	}
+
+	private static double evalBinary(Double lhs, Character operator, String expr, int start, int end, int opID) throws Exception {
+		double rhs = evalImpl(expr, start, end, opID - 1);
+		if (lhs == null) return rhs;
+
+		switch (operator) {
+			case '*': return lhs * rhs;
+			case '/': return lhs / rhs;
+			case '%': return lhs % rhs;
+			case '+': return lhs + rhs;
+			case '-': return lhs - rhs;
+			// case 'L': return (int)lhs << (int)rhs;
+			// case 'R': return (int)lhs >> (int)rhs;
+			// case '&': return (int)lhs & (int)rhs;
+			// case '^': return (int)lhs ^ (int)rhs;
+			// case '|': return (int)lhs | (int)rhs;
+		}
+
+		if (true) {
+			throw new Exception("Bad binary expression");
+		}
+		return 0;
+	}
+
+	private static boolean in(char c, char[] a) {
+		for (char x : a) {
+			if (x == c) return true;
+		}
+		return false;
+	}
+
+	private static int asInt(boolean b) {
+		return b ? 1 : 0;
+	}
+
+	private static double evalImpl(String expr, int start, int end, int opID) throws Exception {
+		if (opID == -1) return evalUnary(expr, start, end);
+
+		char[][] ops = {{'*', '/', '%'}, {'+', '-'}, {'L', 'R'}, {'&'}, {'^'}, {'|'}};
+		int depth = 0;
+		Double operand = null;
+		Character operator = null;
+		boolean isBinaryOp = false;
+
+		for (int i = start; i < end; ++i) {
+			char c = expr.charAt(i);
+
+			depth += asInt(c == '(') - asInt(c == ')');
+
+			if (depth == 0 && isBinaryOp &&  in(c, ops[opID])) {
+				operand = evalBinary(operand, operator, expr, start, i, opID);
+				operator = c;
+				start = i + 1;
+			}
+			else if (depth < 0)
+				throw new Exception("Unmatched parentheses");
+
+			isBinaryOp = (c == ')' || Character.isDigit(c));
+		}
+
+		return evalBinary(operand, operator, expr, start, end, opID);
+	}
+
+	public static String evaluate(String expr) {
+        expr = expr.toLowerCase()
+            .replace(" ", "")
+            .replace("\t", "")
+            .replace("<<", "L")
+            .replace(">>", "R")
+            .replace("sin", "S")
+            .replace("cos", "K")
+            .replace("tan", "T")
+            .replace("sqrt", "Q")
+            .replace("floor", "F")
+            .replace("ceil", "C");
+         
         try {
-            for (String part : parts) {
-                res += Integer.parseInt(part);
-            }
+            return Double.toString(evalImpl(expr, 0, expr.length(), 5));
         }
-        catch(NumberFormatException e) {
+        catch(Exception e) {
             return "Error";
         }
-        
-        return Integer.toString(res);
-    }
-
-    private static int findClosingParenthesis(String str, int openingPos) {
-        int length = str.length();
-        int depth = 1;
-		int pos = openingPos + 1;
-
-        for (; pos < length; ++pos) {
-            char c = str.charAt(pos);
-            if (c == '(')
-                ++depth;
-            else if (c == ')')
-                --depth;
-
-            if (depth == 0) break;
-        }
-        return pos;
-    }
-    
-    // WIP
-    private static int evaluateImpl(String expr, int startPos, int endPos, String depth) {
-		System.out.println("\"" + expr.substring(startPos, endPos) + "\"");
-        // legal characters: digits, operators and parentheses
-        // everything else is an error
-
-        int res = 0;
-		int numStart = startPos;
-		var values = new ArrayList<Integer>();
-		var ops = new ArrayList<Character>();
-
-        for (int pos = startPos; pos <= endPos; ++pos) {
-            char c = expr.charAt(pos);
-
-			if (c == '+' || c == '-' || pos == endPos) {
-				String s = expr.substring(numStart, pos);
-
-				System.out.println(depth + "[" + numStart + ":" + pos + "] = " + s);
-				
-				ops.add(c);
-
-				if (expr.charAt(numStart) != '(') {
-					values.add(Integer.parseInt(s));
-				}
-				
-				numStart = pos + 1;
-				if (expr.charAt(pos + 1) == '(') {
-					int end = findClosingParenthesis(expr, pos + 1);
-					values.add(evaluateImpl(expr, pos + 2, end, depth + "    "));
-					pos = end;
-				}
-			}
-        }
-
-
-		System.out.println(values);
-		String s = expr.substring(numStart, endPos);
-		System.out.println(depth + "[" + numStart + ":" + endPos + "] = " + s);
-		// System.out.println(values);
-
-		return res;
-    }
-    
-    // WIP
-    public static String evaluate2(String expr) {
-        String e = expr.replaceAll("\\s+","");
-        return Integer.toString(evaluateImpl(e, 0, e.length(), ""));
     }
 }
+	
