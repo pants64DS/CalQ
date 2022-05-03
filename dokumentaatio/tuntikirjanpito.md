@@ -12,3 +12,5 @@
 | 22.4  | 2    | sulkulausekkeiden laskeminen
 | 24.4  | 2    | sulkulausekkeiden laskeminen
 | 26.4  | 3    | sulkulausekkeiden laskeminen
+| 28.4  | 2    | fixed-point luokan aloitus
+| 3.5   | 5    | pakkausrakenteen ja projekticongifiguraation korjaaminen

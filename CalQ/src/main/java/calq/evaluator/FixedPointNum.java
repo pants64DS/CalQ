@@ -1,5 +1,4 @@
-
-package calq.calq;
+package calq.evaluator;
 
 public class FixedPointNum {
     int val;

@@ -1,5 +1,5 @@
-package calq.calq;
-import calq.calq.Evaluator;
+package calq.evaluator;
+import calq.evaluator.Evaluator;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,6 +12,6 @@ public class EvaluatorTest {
     
     @Test
     public void MonimutkainenLausekeOikein() {
-        assertEquals(Evaluator.evaluate(Evaluator.evaluate("3*(+(-2*-1-(-2)-(-0x3+-4))-+-+-+10)/2")), "1.5");
+        assertEquals(Evaluator.evaluate("3*(+(-2*-1-(-2)-(-0x3+-4))-+-+-+10)/2"), "1.5");
     }
 }

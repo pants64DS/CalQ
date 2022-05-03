@@ -1,8 +1,12 @@
-package calq.calq;
+package calq.evaluator;
 
 import java.lang.Math;
 
-class Evaluator {
+public class Evaluator {
+
+	private static char[][] binaryOperators = {{'*', '/', '%'}, {'+', '-'}, {'L', 'R'}, {'&'}, {'^'}, {'|'}};
+	private static int initialOpID = binaryOperators.length - 1;
+
 	private static double parseNumber(String expr) {
 		if (expr.startsWith("0x"))
 			return Integer.parseInt(expr.substring(2), 16);
@@ -16,7 +20,7 @@ class Evaluator {
 		if (Character.isDigit(expr.charAt(start)))
 			return parseNumber(expr.substring(start, end));
 		else if (expr.charAt(start) == '(' && expr.charAt(end - 1) == ')')
-			return evalImpl(expr, start + 1, end - 1, 5);
+			return evalImpl(expr, start + 1, end - 1, initialOpID);
 
 		double res = evalUnary(expr, start + 1, end);
 
@@ -32,10 +36,7 @@ class Evaluator {
 			case 'C': return Math.ceil(res);
 		}
 
-		if (true) {
-			throw new Exception("Bad unary expression");
-		}
-		return 0;
+		throw new Exception("Bad unary expression");
 	}
 
 	private static double evalBinary(Double lhs, Character operator, String expr, int start, int end, int opID) throws Exception {
@@ -55,10 +56,7 @@ class Evaluator {
 			// case '|': return (int)lhs | (int)rhs;
 		}
 
-		if (true) {
-			throw new Exception("Bad binary expression");
-		}
-		return 0;
+		throw new Exception("Bad binary expression");
 	}
 
 	private static boolean in(char c, char[] a) {
@@ -75,7 +73,7 @@ class Evaluator {
 	private static double evalImpl(String expr, int start, int end, int opID) throws Exception {
 		if (opID == -1) return evalUnary(expr, start, end);
 
-		char[][] ops = {{'*', '/', '%'}, {'+', '-'}, {'L', 'R'}, {'&'}, {'^'}, {'|'}};
+		
 		int depth = 0;
 		Double operand = null;
 		Character operator = null;
@@ -86,7 +84,7 @@ class Evaluator {
 
 			depth += asInt(c == '(') - asInt(c == ')');
 
-			if (depth == 0 && isBinaryOp &&  in(c, ops[opID])) {
+			if (depth == 0 && isBinaryOp &&  in(c, binaryOperators[opID])) {
 				operand = evalBinary(operand, operator, expr, start, i, opID);
 				operator = c;
 				start = i + 1;
@@ -101,24 +99,23 @@ class Evaluator {
 	}
 
 	public static String evaluate(String expr) {
-        expr = expr.toLowerCase()
-            .replace(" ", "")
-            .replace("\t", "")
-            .replace("<<", "L")
-            .replace(">>", "R")
-            .replace("sin", "S")
-            .replace("cos", "K")
-            .replace("tan", "T")
-            .replace("sqrt", "Q")
-            .replace("floor", "F")
-            .replace("ceil", "C");
-         
-        try {
-            return Double.toString(evalImpl(expr, 0, expr.length(), 5));
-        }
-        catch(Exception e) {
-            return "Error";
-        }
-    }
+		expr = expr.toLowerCase()
+			.replace(" ", "")
+			.replace("\t", "")
+			.replace("<<", "L")
+			.replace(">>", "R")
+			.replace("sin", "S")
+			.replace("cos", "K")
+			.replace("tan", "T")
+			.replace("sqrt", "Q")
+			.replace("floor", "F")
+			.replace("ceil", "C");
+		 
+		try {
+			return Double.toString(evalImpl(expr, 0, expr.length(), initialOpID));
+		}
+		catch(Exception e) {
+			return "Error";
+		}
+	}
 }
-	

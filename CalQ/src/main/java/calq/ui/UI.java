@@ -1,4 +1,4 @@
-package calq.calq;
+package calq.ui;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -7,7 +7,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class App extends Application {
+import calq.evaluator.Evaluator;
+
+public class UI extends Application {
     @Override
     public void start(Stage stage) {
         var resultLabel = new Label();
