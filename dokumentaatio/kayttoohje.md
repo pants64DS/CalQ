@@ -4,7 +4,7 @@ To run the program, make sure you have Java (at least Java 11, with JavaFX inclu
 ```
 java -jar CalQ.jar
 ```
-(or if the filename of the -jar file in the release happens to be slightly different, type that instead of `CalQ.jar`)
+(or if the filename of the .jar file in the release happens to be slightly different, type that instead of `CalQ.jar`)
 
 The calculator window contains a single text field and some space below it where the result will be displayed:
 
