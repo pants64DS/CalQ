@@ -1,6 +1,6 @@
 # A Simple Fixed-Point Calculator
 
-The goal of this project is to make a simple and convenient [SpeedCrunch](https://bitbucket.org/heldercorreia/speedcrunch/src/master/)-style calculator for fixed-point arithmetic.
+The goal of this project was to make a simple and convenient [SpeedCrunch](https://bitbucket.org/heldercorreia/speedcrunch/src/master/)-style calculator for fixed-point arithmetic.
 
 [Read More (vaatimusmaarittely)](https://github.com/pants64DS/CalQ/blob/master/dokumentaatio/vaatimusmaarittely.md)
 
