@@ -31,7 +31,7 @@ The goal of this project was to make a simple and convenient [SpeedCrunch](https
 * `-` for negation
 * `~` for bitwise not
 * `sin` for sine 
-* `cos` for sosine 
+* `cos` for cosine 
 * `tan` for tangent 
 * `sqrt` for square root 
 * `floor` for rounding to the nearest integer below 
