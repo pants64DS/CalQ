@@ -105,7 +105,7 @@ public class Evaluator {
 			.replace("abs", "A");
 		
 		try {
-			return evalImpl(expr, 0, expr.length(), initialOpID).toString();
+			return " = " + evalImpl(expr, 0, expr.length(), initialOpID).toString();
 		}
 		catch(Exception e) {
 			return "Invalid expression";

@@ -1,6 +1,6 @@
 # A Simple Fixed-Point Calculator
 
-The goal of this project was to make a simple and convenient [SpeedCrunch](https://bitbucket.org/heldercorreia/speedcrunch/src/master/)-style calculator for fixed-point arithmetic. The GUI consists of a single window, which contains a text field at the bottom.
+The goal of this project was to make a simple and convenient [SpeedCrunch](https://bitbucket.org/heldercorreia/speedcrunch/src/master/)-style calculator for fixed-point arithmetic. The GUI consists of a single window, which contains a text field at the top.
 
 ## The app supports the following features:
 * The user can write a fixed-point arithmetic expression made of ASCII characters to the text field
