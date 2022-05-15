@@ -40,7 +40,7 @@ public class Evaluator {
 			case '/': return lhs.div(rhs);
 			// case '%': return lhs % rhs;
 			case '+': return lhs.add(rhs);
-			case '-': return lhs.add(rhs);
+			case '-': return lhs.sub(rhs);
 			case 'L': return lhs.shift(rhs);
 			case 'R': return lhs.shift(rhs.neg());
 			case '&': return lhs.and(rhs);
