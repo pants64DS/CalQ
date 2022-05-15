@@ -14,3 +14,6 @@
 | 26.4  | 3    | sulkulausekkeiden laskeminen
 | 28.4  | 2    | fixed-point luokan aloitus
 | 3.5   | 5    | pakkausrakenteen ja projekticongifiguraation korjaaminen
+| 13.5  | 2    | fixed-point aritmetiikan totetus
+| 14.5  | 6    | fixed-point aritmetiikan totetus
+| 15.5  | 8    | fixed-point aritmetiikan totetus

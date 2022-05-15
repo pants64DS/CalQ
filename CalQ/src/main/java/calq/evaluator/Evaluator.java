@@ -7,53 +7,45 @@ public class Evaluator {
 	private static char[][] binaryOperators = {{'*', '/', '%'}, {'+', '-'}, {'L', 'R'}, {'&'}, {'^'}, {'|'}};
 	private static int initialOpID = binaryOperators.length - 1;
 
-	private static double parseNumber(String expr) {
-		if (expr.startsWith("0x"))
-			return Integer.parseInt(expr.substring(2), 16);
-		else if (expr.startsWith("0"))
-			return Integer.parseInt(expr, 8);
-		else
-			return Double.parseDouble(expr);
-	}
-
-	private static double evalUnary(String expr, int start, int end) throws Exception {
+	private static FixedPointNum evalUnary(String expr, int start, int end) throws Exception {
 		if (Character.isDigit(expr.charAt(start)))
-			return parseNumber(expr.substring(start, end));
+			return new FixedPointNum(expr, start, end);
 		else if (expr.charAt(start) == '(' && expr.charAt(end - 1) == ')')
 			return evalImpl(expr, start + 1, end - 1, initialOpID);
 
-		double res = evalUnary(expr, start + 1, end);
+		FixedPointNum res = evalUnary(expr, start + 1, end);
 
 		switch (expr.charAt(start)) {
-			case '+': return +res;
-			case '-': return -res;
-			// case '~': return ~res;
-			case 'S': return Math.sin(res);
-			case 'K': return Math.cos(res);
-			case 'T': return Math.tan(res);
-			case 'Q': return Math.sqrt(res);
-			case 'F': return Math.floor(res);
-			case 'C': return Math.ceil(res);
+			case '+': return res;
+			case '-': return res.neg();
+			case '~': return res.not();
+			case 'S': return res.sin();
+			case 'K': return res.cos();
+			case 'T': return res.tan();
+			case 'Q': return res.sqrt();
+			case 'F': return res.floor();
+			case 'C': return res.ceil();
+			case 'A': return res.abs();
 		}
 
 		throw new Exception("Bad unary expression");
 	}
 
-	private static double evalBinary(Double lhs, Character operator, String expr, int start, int end, int opID) throws Exception {
-		double rhs = evalImpl(expr, start, end, opID - 1);
+	private static FixedPointNum evalBinary(FixedPointNum lhs, Character operator, String expr, int start, int end, int opID) throws Exception {
+		FixedPointNum rhs = evalImpl(expr, start, end, opID - 1);
 		if (lhs == null) return rhs;
 
 		switch (operator) {
-			case '*': return lhs * rhs;
-			case '/': return lhs / rhs;
-			case '%': return lhs % rhs;
-			case '+': return lhs + rhs;
-			case '-': return lhs - rhs;
-			// case 'L': return (int)lhs << (int)rhs;
-			// case 'R': return (int)lhs >> (int)rhs;
-			// case '&': return (int)lhs & (int)rhs;
-			// case '^': return (int)lhs ^ (int)rhs;
-			// case '|': return (int)lhs | (int)rhs;
+			case '*': return lhs.mul(rhs);
+			case '/': return lhs.div(rhs);
+			// case '%': return lhs % rhs;
+			case '+': return lhs.add(rhs);
+			case '-': return lhs.add(rhs);
+			case 'L': return lhs.shift(rhs);
+			case 'R': return lhs.shift(rhs.neg());
+			case '&': return lhs.and(rhs);
+			case '^': return lhs.xor(rhs);
+			case '|': return lhs.orr(rhs);
 		}
 
 		throw new Exception("Bad binary expression");
@@ -70,12 +62,12 @@ public class Evaluator {
 		return b ? 1 : 0;
 	}
 
-	private static double evalImpl(String expr, int start, int end, int opID) throws Exception {
+	private static FixedPointNum evalImpl(String expr, int start, int end, int opID) throws Exception {
 		if (opID == -1) return evalUnary(expr, start, end);
 
 		
 		int depth = 0;
-		Double operand = null;
+		FixedPointNum operand = null;
 		Character operator = null;
 		boolean isBinaryOp = false;
 
@@ -109,13 +101,14 @@ public class Evaluator {
 			.replace("tan", "T")
 			.replace("sqrt", "Q")
 			.replace("floor", "F")
-			.replace("ceil", "C");
-		 
+			.replace("ceil", "C")
+			.replace("abs", "A");
+		
 		try {
-			return Double.toString(evalImpl(expr, 0, expr.length(), initialOpID));
+			return evalImpl(expr, 0, expr.length(), initialOpID).toString();
 		}
 		catch(Exception e) {
-			return "Error";
+			return "Invalid expression";
 		}
 	}
 }
