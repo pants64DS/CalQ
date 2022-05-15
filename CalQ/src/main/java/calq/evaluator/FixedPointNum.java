@@ -58,6 +58,10 @@ public class FixedPointNum {
 
 	private void init(String str, int start, int end, int radix) throws Exception {
 		int separatorPos = findSeparator(str, start, end);
+                
+                if (separatorPos < end && radix == 8) {
+                    radix = 10;
+                }
 
 		boolean hasIntegerPart = separatorPos > start;
 		boolean hasFractionalPart = separatorPos < end - 1;

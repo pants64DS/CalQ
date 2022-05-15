@@ -4,9 +4,9 @@ The goal of this project was to make a simple and convenient [SpeedCrunch](https
 
 ## The app supports the following features:
 * The user can write a fixed-point arithmetic expression made of ASCII characters to the text field
-* When the user presses Enter, the result of the expression is displayed
+* When the user presses `Enter`, the result of the expression is displayed
 * The expression may contain several different binary and unary operators (see below)
-* Numbers in the expression are hexadecimal when prefixed with "0x", octal when prefixed with "0" or decimal when there is no prefix
+* Numbers in the expression are hexadecimal when prefixed with `0x`, octal when prefixed with `0` or decimal when there is no prefix
 * Operators follow [the same precedence rules as standard C++](https://en.cppreference.com/w/cpp/language/operator_precedence)
 * Like in math, the precedence can be changed using parentheses
 * Functions like `sin`, `cos`, `sqrt`, etc. 

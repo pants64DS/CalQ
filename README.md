@@ -2,7 +2,8 @@
 
 The goal of this project was to make a simple and convenient [SpeedCrunch](https://bitbucket.org/heldercorreia/speedcrunch/src/master/)-style calculator for fixed-point arithmetic.
 
-[Read More (vaatimusmaarittely)](https://github.com/pants64DS/CalQ/blob/master/dokumentaatio/vaatimusmaarittely.md)
+[Read more about the features (vaatimusmaarittely)](https://github.com/pants64DS/CalQ/blob/master/dokumentaatio/vaatimusmaarittely.md)
+[Instructions for use](https://github.com/pants64DS/CalQ/blob/master/dokumentaatio/kayttoohje.md)
 
 To run the app from command line, go to the CalQ folder and type "mvn compile exec:java -Dexec.mainClass=calq.Main". Unfortunately, I still couldn't / didn't have the time to get the tests run properly.
 
